@@ -34,6 +34,7 @@ class FlutterFloatNotification {
     Duration? animationDuration,
     Curve? animationCurve,
     Duration? duration,
+    bool? indefinite,
     double? height,
     OnFlushTap<T>? onTap,
     FloatingGestureDirection direction = FloatingGestureDirection.all,
@@ -45,7 +46,9 @@ class FlutterFloatNotification {
       builder: (BuildContext context) => FlushBarContent<T>(
         childBuilder: childBuilder,
         duration: duration ?? const Duration(seconds: 2),
-        animationDuration: animationDuration ?? const Duration(milliseconds: 500),
+        indefinite: indefinite ?? false,
+        animationDuration:
+            animationDuration ?? const Duration(milliseconds: 500),
         animationCurve: animationCurve ?? Curves.ease,
         height: height,
         onTap: onTap,

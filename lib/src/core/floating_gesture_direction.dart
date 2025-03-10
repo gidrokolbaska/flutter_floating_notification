@@ -7,4 +7,7 @@ enum FloatingGestureDirection {
 
   /// Only up and down
   vertical,
+
+  /// Ignore gestures completely
+  none,
 }

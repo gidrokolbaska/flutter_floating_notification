@@ -49,6 +49,7 @@ class FlushBarContent<T> extends StatefulWidget {
     super.key,
     required this.childBuilder,
     this.duration = const Duration(seconds: 2),
+    this.indefinite = false,
     this.animationDuration = const Duration(milliseconds: 500),
     this.animationCurve = Curves.ease,
     required this.onDismissed,
@@ -65,6 +66,9 @@ class FlushBarContent<T> extends StatefulWidget {
 
   /// 动画时长
   final Duration animationDuration;
+
+  ///Should the bar be indefinite or not
+  final bool indefinite;
 
   /// 动画曲线
   final Curve animationCurve;
@@ -120,7 +124,9 @@ class _FlushBarContentState<T> extends State<FlushBarContent<T>> {
   Future<void> _show() async {
     _flushProvider.updateDuration(widget.animationDuration);
     _flushProvider.updateOffset(Offset.zero);
-    _startTimer(additional: widget.animationDuration);
+    if (!widget.indefinite) {
+      _startTimer(additional: widget.animationDuration);
+    }
   }
 
   Future<void> _dismiss({Offset? offset, Duration? duration, T? value}) async {
@@ -134,6 +140,7 @@ class _FlushBarContentState<T> extends State<FlushBarContent<T>> {
   }
 
   void _onVerticalDragStart(DragStartDetails details) {
+    if (widget.direction == FloatingGestureDirection.none) return;
     if (widget.direction == FloatingGestureDirection.horizontal) return;
 
     if (_flushProvider.offset.dx != 0 || _locked) {
@@ -144,6 +151,7 @@ class _FlushBarContentState<T> extends State<FlushBarContent<T>> {
   }
 
   void _onVerticalDragUpdate(DragUpdateDetails details) {
+    if (widget.direction == FloatingGestureDirection.none) return;
     if (widget.direction == FloatingGestureDirection.horizontal) return;
 
     if (_flushProvider.offset.dx != 0 || _locked) {
@@ -174,6 +182,7 @@ class _FlushBarContentState<T> extends State<FlushBarContent<T>> {
   }
 
   void _onVerticalDragEnd(DragEndDetails details) {
+    if (widget.direction == FloatingGestureDirection.none) return;
     if (widget.direction == FloatingGestureDirection.horizontal) return;
 
     if (_flushProvider.offset.dx != 0 || _locked) {
@@ -206,6 +215,7 @@ class _FlushBarContentState<T> extends State<FlushBarContent<T>> {
   }
 
   void _onVerticalDragCancel() {
+    if (widget.direction == FloatingGestureDirection.none) return;
     if (widget.direction == FloatingGestureDirection.horizontal) return;
 
     if (_flushProvider.offset.dx != 0 || _locked) {
@@ -230,6 +240,7 @@ class _FlushBarContentState<T> extends State<FlushBarContent<T>> {
   }
 
   void _onHorizontalDragStart(DragStartDetails details) {
+    if (widget.direction == FloatingGestureDirection.none) return;
     if (widget.direction == FloatingGestureDirection.vertical) return;
 
     if (_flushProvider.offset.dy != 0 || _locked) {
@@ -240,6 +251,7 @@ class _FlushBarContentState<T> extends State<FlushBarContent<T>> {
   }
 
   void _onHorizontalDragUpdate(DragUpdateDetails details) {
+    if (widget.direction == FloatingGestureDirection.none) return;
     if (widget.direction == FloatingGestureDirection.vertical) return;
 
     if (_flushProvider.offset.dy != 0 || _locked) {
@@ -252,6 +264,7 @@ class _FlushBarContentState<T> extends State<FlushBarContent<T>> {
   }
 
   void _onHorizontalDragEnd(DragEndDetails details) {
+    if (widget.direction == FloatingGestureDirection.none) return;
     if (widget.direction == FloatingGestureDirection.vertical) return;
 
     if (_flushProvider.offset.dy != 0 || _locked) {
@@ -287,6 +300,7 @@ class _FlushBarContentState<T> extends State<FlushBarContent<T>> {
   }
 
   void _onHorizontalDragCancel() {
+    if (widget.direction == FloatingGestureDirection.none) return;
     if (widget.direction == FloatingGestureDirection.vertical) return;
 
     if (_flushProvider.offset.dy != 0 || _locked) {
