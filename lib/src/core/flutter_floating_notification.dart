@@ -8,20 +8,21 @@ import 'floating_gesture_direction.dart';
 
 /// 浮动通知队列对象
 class FlutterFloatNotification {
-  FlutterFloatNotification();
+  static final FlutterFloatNotification _singleton =
+      FlutterFloatNotification._internal();
 
-  static final FlutterFloatNotification _global = FlutterFloatNotification();
+  factory FlutterFloatNotification() {
+    return _singleton;
+  }
 
-  /// 全局浮动通知队列对象
-  static FlutterFloatNotification global() => _global;
+  FlutterFloatNotification._internal();
 
   final List<OverlayEntry> _flushEntryList = <OverlayEntry>[];
-
-  bool _isFlushShowing = false;
 
   void _overlayInsert(BuildContext context, OverlayEntry entry) {
     try {
       Overlay.of(context).insert(entry);
+      _flushEntryList.add(entry);
     } catch (e) {
       debugPrint('_overlayInsert error: $e');
     }
@@ -60,17 +61,12 @@ class FlutterFloatNotification {
       ),
     );
 
-    _flushEntryList.add(entry);
-
-    if (!_isFlushShowing) {
-      _show(context, _flushEntryList.first);
-    }
+    _show(context, entry);
 
     return completer.future;
   }
 
   void _show(BuildContext context, OverlayEntry entry) {
-    _isFlushShowing = true;
     Future<void>.microtask(() => _overlayInsert(context, entry));
   }
 
@@ -79,12 +75,6 @@ class FlutterFloatNotification {
       _flushEntryList.first.remove();
       _flushEntryList.removeAt(0);
     }
-
-    if (_flushEntryList.isEmpty) {
-      _isFlushShowing = false;
-    } else {
-      _show(context, _flushEntryList.first);
-    }
   }
 
   /// 清空浮动通知
@@ -92,7 +82,6 @@ class FlutterFloatNotification {
     for (final OverlayEntry entry in _flushEntryList) {
       entry.remove();
     }
-    _isFlushShowing = false;
     _flushEntryList.clear();
   }
 }

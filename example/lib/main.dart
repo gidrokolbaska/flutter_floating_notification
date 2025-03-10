@@ -76,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 final v = await FlutterFloatNotification().showFloatingBar<int>(
                   context,
                   direction: FloatingGestureDirection.none,
-                  indefinite: true,
+                  indefinite: false,
                   childBuilder: (context, dismiss) {
                     return Container(
                       color: color,
@@ -95,6 +95,11 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text('Show Flush'),
             ),
             ElevatedButton(
+                onPressed: () {
+                  FlutterFloatNotification().clear();
+                },
+                child: const Text('Clear Flush')),
+            ElevatedButton(
               onPressed: () async {
                 // 生成随机数
                 // 再根据随机数生成随机颜色
@@ -111,8 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 final double randomHeight =
                     100 + random.nextInt(100).toDouble();
 
-                final v = await FlutterFloatNotification.global()
-                    .showFloatingBar<int>(
+                final v = await FlutterFloatNotification().showFloatingBar<int>(
                   context,
                   direction: FloatingGestureDirection.none,
                   childBuilder: (context, FlushDismiss<int> dismiss) {
